@@ -1,0 +1,19 @@
+[general]
+name=Hypsometry
+description=Calculate hypsometric curves for selected areas
+category=Raster
+version=0.1.0
+qgisMinimumVersion=2.0
+
+icon=icons/hypsometry.png
+tags=raster,analysis,hypsometry
+
+author=Alexander Bruy
+email=alexander.bruy@gmail.com
+
+homepage=http://hub.qgis.org/projects/hypsometry/wiki
+tracker=http://hub.qgis.org/projects/hupsometry
+repository=https://github.com/alexbruy/hypsometry
+
+experimental=True
+deprecated=False

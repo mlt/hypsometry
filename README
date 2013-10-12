@@ -1,0 +1,4 @@
+Hypsometry
+-----------------
+Calculate hypsometric curves for features of polygon layer(s) and save them as
+CSV file for further processing.
