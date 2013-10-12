@@ -31,7 +31,7 @@ from PyQt4.QtGui import *
 from qgis.core import *
 from qgis.gui import *
 
-import hypdsometrydialog
+import hypsometrydialog
 import aboutdialog
 
 import resources_rc
