@@ -46,7 +46,8 @@ def getRasterLayerNames():
     layerMap = QgsMapLayerRegistry.instance().mapLayers()
     layerNames = []
     for name, layer in layerMap.iteritems():
-        if layer.type() == QgsMapLayer.RasterLayer:
+        if layer.type() == QgsMapLayer.RasterLayer \
+                and layer.providerType() == 'gdal':
             layerNames.append(unicode(layer.name()))
     return sorted(layerNames, cmp=locale.strcoll)
 
@@ -66,7 +67,8 @@ def getRasterLayerByName(layerName):
     layerMap = QgsMapLayerRegistry.instance().mapLayers()
     for name, layer in layerMap.iteritems():
         if layer.type() == QgsMapLayer.RasterLayer \
-                and layer.name() == layerName:
+                and layer.name() == layerName \
+                and layer.providerType() == 'gdal':
             if layer.isValid():
                 return layer
             else:
