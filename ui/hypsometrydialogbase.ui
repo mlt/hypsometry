@@ -64,7 +64,7 @@
    <item row="3" column="0" colspan="3">
     <widget class="QCheckBox" name="chkAreaPercentage">
      <property name="text">
-      <string>Calculate % of area instead of pixel count</string>
+      <string>Use % of area instead of absolute value</string>
      </property>
     </widget>
    </item>

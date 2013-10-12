@@ -73,3 +73,46 @@ def getRasterLayerByName(layerName):
                 return layer
             else:
                 return None
+
+
+def mapToPixel(mX, mY, geoTransform):
+    if geoTransform[2] + geoTransform[4] == 0:
+        pX = (mX - geoTransform[0]) / geoTransform[1]
+        pY = (mY - geoTransform[3]) / geoTransform[5]
+    else:
+        (pX, pY) = applyGeoTransform(mX, mY, invertGeoTransform(geoTransform))
+    return (int(pX), int(pY))
+
+
+def pixelToMap(pX, pY, geoTransform):
+    (mX, mY) = applyGeoTransform(pX + 0.5, pY + 0.5, geoTransform)
+    return (mX, mY)
+
+
+def applyGeoTransform(inX, inY, geoTransform):
+    outX = geoTransform[0] + inX * geoTransform[1] + inY * geoTransform[2]
+    outY = geoTransform[3] + inX * geoTransform[4] + inY * geoTransform[5]
+    return (outX, outY)
+
+
+def invertGeoTransform(geoTransform):
+    det = geoTransform[1] * geoTransform[5] - geoTransform[2] * geoTransform[4]
+
+    if abs(det) < 0.000000000000001:
+        return
+
+    invDet = 1.0 / det
+
+    outGeoTransform = [0, 0, 0, 0, 0, 0]
+    outGeoTransform[1] = geoTransform[5] * invDet
+    outGeoTransform[4] = -geoTransform[4] * invDet
+
+    outGeoTransform[2] = -geoTransform[2] * invDet
+    outGeoTransform[5] = geoTransform[1] * invDet
+
+    outGeoTransform[0] = (geoTransform[2] * geoTransform[3] - geoTransform[0]
+                          * geoTransform[5]) * invDet
+    outGeoTransform[3] = (-geoTransform[1] * geoTransform[3] + geoTransform[0]
+                          * geoTransform[4]) * invDet
+
+    return outGeoTransform

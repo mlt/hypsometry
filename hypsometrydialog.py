@@ -25,6 +25,8 @@ __copyright__ = '(C) 2013, Alexander Bruy'
 
 __revision__ = '$Format:%H$'
 
+import os
+
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 
@@ -72,18 +74,39 @@ class HypsometryDialog(QDialog, Ui_HypsometryDialog):
         QDialog.reject(self)
 
     def accept(self):
-        if not self.leOutputDir.text():
+        raster = utils.getRasterLayerByName(self.cmbDEM.currentText())
+        vector = utils.getVectorLayerByName(self.cmbPolygon.currentText())
+        directory = self.leOutputDir.text()
+        step = self.spnElevationStep.value()
+
+        if raster is None or vector is None:
+            QMessageBox.warning(self,
+                                self.tr('Invalid layer(s)'),
+                                self.tr('Selected raster or vector layer is '
+                                        'invalid. Please valid layers and try '
+                                        'again.'))
+            return
+
+        if step == 0.0:
+            QMessageBox.warning(self,
+                                self.tr('Invalid step value'),
+                                self.tr('Step value should be greater than 0. '
+                                        'Please choose another value and try '
+                                        'again.'))
+            return
+
+        if not directory:
             QMessageBox.warning(self,
                                 self.tr('No output directory'),
                                 self.tr('Output directory is not set. Please '
                                         'select directory and try again.'))
             return
 
-        self.workThread = HypsometryThread(raster,
+        self.workThread = HypsometryThread(unicode(raster.source()),
                                            vector,
                                            step,
                                            directory,
-                                           calculatePercentage)
+                                           self.chkAreaPercentage.isChecked())
         self.workThread.rangeChanged.connect(self.setProgressRange)
         self.workThread.updateProgress.connect(self.updateProgress)
         self.workThread.processFinished.connect(self.processFinished)
