@@ -172,6 +172,8 @@ class HypsometryThread(QThread):
     def calculateHypsometry(self, fid, data, pX, pY):
         out = dict()
         d = data.compressed()
+        if d.size == 0:
+            return
         minValue = d.min()
         maxValue = d.max()
         startValue = minValue
